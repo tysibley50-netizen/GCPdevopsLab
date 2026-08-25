@@ -1,6 +1,6 @@
 .terraform/
-.terraform.locl.hcl
 *.tfstate
 *.tfstate.backup
+.terraform.lock.hcl
 *.tfvars
-*.tfvars.json/
+!terraform.tfvars.example
