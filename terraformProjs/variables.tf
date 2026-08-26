@@ -1,7 +1,7 @@
 variable "project_id" {
     type        = string
     description = "Project id of my at home GCP project"
-    default = "insertprojectID"
+    default = "project-1f03d34e-6e19-45e0-a6a"
 }
 
 variable "google_region" {

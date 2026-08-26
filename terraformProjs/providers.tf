@@ -11,6 +11,6 @@ terraform {
     }
 }
 provider "google" {
-    project = var.myprojectid
-    region = var.myprojectfree region
+    project = var.project-1f03d34e-6e19-45e0-a6a
+    region = var.us-east1
 }
