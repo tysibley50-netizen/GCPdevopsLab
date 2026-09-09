@@ -1,4 +1,4 @@
-resource "google_cloud_run_v2_service" "tiny-clickops-service-871657323406" {
+resource "google_cloud_run_v2_service" "app" {
   name     = "demo-service"
   location = var.google_region
   ingress  = "INGRESS_TRAFFIC_ALL"
