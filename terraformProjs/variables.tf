@@ -6,7 +6,12 @@ variable "project_id" {
 variable "google_region" {
   type        = string
   description = "The google region where my bucket sits"
-  
+ 
+variable "github_repository" {
+  type        = string
+  description = "my github rep in `owner/repo` format"
+
+
 }
 
 
