@@ -12,19 +12,16 @@ resource "google_project_service" "wif_apis" {
 
  # Creating the Workload Identity Pool
 resource "google_iam_workload_identity_pool" "github_pool" {
- workload_identity_pool_id = "github-actions-pool"
- display_name		   = "Github Actions Pool"
- description		   = "Identity pool for Github Actions CI/CD pipeline"
- depends_on		   = [google_project_service.wif_apis]
-
+  workload_identity_pool_id = "github-actions-pool"
+  display_name		   = "Github Actions Pool"
+  description		   = "Identity pool for Github Actions CI/CD pipeline"
+  depends_on		   = [google_project_service.wif_apis]
+}
 # Create the Workload Identity Provider for GitHub OIDC 
-resource "google_iam_workload_identity_pool_provider"
-"github_provider" {
-  workload_identity_pool_id
-  google_iam_workload_identity_pool.github_pool.
-  workload_identity_pool_id
+resource "google_iam_workload_identity_pool_provider" "github_provider" {
+  workload_identity_pool_id = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
   workload_identity_pool_provider_id = "github-actions-provider"
-  display_name                       = "GitHub Actions Provider
+  display_name                       = "GitHub Actions Provider"
 
   attribute_mapping = {
     "google.subject"  = "assertion.sub"
@@ -47,12 +44,9 @@ resource "google_service_account" "github_actions_sa" {
 
 # 4. Allow Github Actions (via WIF Pool) to impersonate the CI/CD Serv. account
 resource "google_service_account_iam_member" "wif_impersonation" {
-  service_account_id = google_service_account.github_actions_sa.
-  name
+  service_account_id = google_service_account.github_actions_sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/$
-  {google_iam_workload_identity_pool.github_pool.name}/attribute.
-  repository/${var.github.repository}"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github.repository}"
 }
 # 5. Grant infrastructure provisioning roles to the CI/CD Service Account
 resource "google_project_iam_member" "cicd_roles" {
