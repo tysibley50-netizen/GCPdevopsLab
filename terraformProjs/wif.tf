@@ -46,7 +46,7 @@ resource "google_service_account" "github_actions_sa" {
 resource "google_service_account_iam_member" "wif_impersonation" {
   service_account_id = google_service_account.github_actions_sa.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github.repository}"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
 }
 # 5. Grant infrastructure provisioning roles to the CI/CD Service Account
 resource "google_project_iam_member" "cicd_roles" {
