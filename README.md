@@ -8,3 +8,6 @@ today I was able to create a cloud storage bucket to save my IAC for my tiny cli
 
 # 09102026
 After overcoming a type in my imports.tf file, finally was able to setup a VPC, monitoring, and secrets with terraform regarding my tiny CR V2 service. Super stoked as we finally can proceed to phase 3.
+
+# 09162026
+So far today I have set up an artifact registry as IAC, created a tiny app to deploy into Cloud run using python, FastAPI, and containerized into Docker. Edited variables to include default container image, and verified the app could run locally. Phase 4 - complete.

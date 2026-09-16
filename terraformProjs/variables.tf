@@ -11,7 +11,10 @@ variable "github_repository" {
   description = "my github rep in `owner/repo` format"
 }
 
-
+variable "container_image" {
+  type = string
+  default = "us-east1-docker.pkg.dev/project-1f03d34e-6e19-45e0-a6a/app-repo/app:latest"
+}
 
 
 
