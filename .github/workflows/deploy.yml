@@ -37,8 +37,8 @@ jobs:
       # 4. Container Build & Push
       - name: Build and Push Docker Image
         run: |
-          IMAGE_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:latest${{ github.sha }}"
-          LATEST_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:latest"
+          IMAGE_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/app:latest${{ github.sha }}"
+          LATEST_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run-source-deploy/app:latest"
           
           docker build -t $IMAGE_TAG -t $LATEST_TAG ./tinyApp
           docker push $IMAGE_TAG
