@@ -32,7 +32,7 @@ jobs:
       # 3. Configure Docker authentication for Artifact Registry
       - name: Docker Auth to Artifact Registry
         run: |
-          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
       # 4. Container Build & Push
       - name: Build and Push Docker Image
