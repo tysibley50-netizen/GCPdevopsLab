@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'terraform/**'
+      - 'terraformProjs/**'
       - 'app/**'
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./terraformProjs/terraform
+        working-directory: ./terraformProjs
 
     steps:
       - name: Checkout Code
