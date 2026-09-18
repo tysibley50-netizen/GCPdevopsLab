@@ -51,7 +51,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ./terraformProjs
         run: |
-          terraform init -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tf-state" \
+          terraform init -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tf-state1" \
                          -backend-config="prefix=terraform/state"
           
           terraform apply -auto-approve \
