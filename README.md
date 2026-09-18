@@ -11,3 +11,6 @@ After overcoming a type in my imports.tf file, finally was able to setup a VPC, 
 
 # 09162026
 So far today I have set up an artifact registry as IAC, created a tiny app to deploy into Cloud run using python, FastAPI, and containerized into Docker. Edited variables to include default container image, and verified the app could run locally. Phase 4 - complete. Phase 5 also complete. Look into github actions failing then active recall!
+
+# 09182026
+I was unable to get the full pipeline working due to an error in my image tags. Next session will require debugging in Docker yml associated with my app.
