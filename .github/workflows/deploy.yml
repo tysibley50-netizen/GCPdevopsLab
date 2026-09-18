@@ -49,7 +49,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Apply
-        working-directory: ./terraform
+        working-directory: ./terraformProjs
         run: |
           terraform init -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tf-state" \
                          -backend-config="prefix=terraform/state"
