@@ -18,3 +18,5 @@ I was unable to get the full pipeline working due to an error in my image tags. 
 # 09/21/2026
 
 Today I will be troubleshooting my GH Actions pipeline. Looks like we were denied permissions on our project? Repushing first to troubleshoot issue and performing follow on actions if needed.
+
+- Looks like I foolishly hardcoded the docker repo, of which my service account did not have access to. Its like Claude just speaks the language of information. Love it.
