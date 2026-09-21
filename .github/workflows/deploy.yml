@@ -1,4 +1,3 @@
-
 on:
   push:
     branches:
@@ -29,31 +28,39 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      # 3. Configure Docker authentication for Artifact Registry
-      - name: Docker Auth to Artifact Registry
-        run: |
-          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
-
-      # 4. Container Build & Push
-      - name: Build and Push Docker Image
-        run: |
-          IMAGE_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:${{ github.sha }}"
-          LATEST_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:latest"
-          
-          docker build -t $IMAGE_TAG -t $LATEST_TAG ./tinyApp
-          docker push $IMAGE_TAG
-          docker push $LATEST_TAG
-
-      # 5. Apply Infrastructure & Cloud Run Revision
+      # 3. Provision infrastructure FIRST (Artifact Registry repo, IAM, etc.)
+      #    This must run before the Docker push step below, otherwise the
+      #    push fails with "repository ... denied (or it may not exist)"
+      #    on any environment where the repo hasn't been created yet.
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Apply
+      - name: Terraform Init
         working-directory: ./terraformProjs
         run: |
           terraform init -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tf-state1" \
                          -backend-config="prefix=terraform/state"
-          
+
+      - name: Terraform Apply (infra)
+        working-directory: ./terraformProjs
+        run: |
           terraform apply -auto-approve \
                           -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
+                          -var="region=us-east1" \
+                          -var="deploy_sa_email=${{ vars.GCP_SA_EMAIL }}" \
                           -var="github_repository=${{ github.repository }}"
+
+      # 4. Configure Docker authentication for Artifact Registry
+      - name: Docker Auth to Artifact Registry
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+
+      # 5. Container Build & Push (app-repo now guaranteed to exist)
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:${{ github.sha }}"
+          LATEST_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:latest"
+
+          docker build -t $IMAGE_TAG -t $LATEST_TAG ./tinyApp
+          docker push $IMAGE_TAG
+          docker push $LATEST_TAG

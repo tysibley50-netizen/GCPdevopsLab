@@ -5,6 +5,7 @@ variable "project_id" {
 variable "google_region" {
   type        = string
   description = "The google region where my bucket sits"
+  default = "us-east1"
 } 
 variable "github_repository" {
   type        = string
