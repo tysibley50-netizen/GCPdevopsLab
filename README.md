@@ -22,4 +22,4 @@ Today I will be troubleshooting my GH Actions pipeline. Looks like we were denie
 - Looks like I foolishly hardcoded the docker repo, of which my service account did not have access to. Its like Claude just speaks the language of information. Love itTemporarily create app-repo in my region to troubleshoot further.Last update - I was unable to get this going likely from a discrepancy in app-repo and my existing repo. Start there.
 
 - Alright I got home and I declared a default region in my variables.tf, added my service account as a artifact writer to my SPECIFIC repo, then I added and redid the deploy.yml.
-- Alright I commented out the old deploy.yml file. 
+- Alright I commented out the old deploy.yml file. Alright I fixed one more typo.

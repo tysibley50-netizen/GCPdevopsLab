@@ -6,7 +6,7 @@ resource "google_artifact_registry_repository" "app_repo" {
   format	= "DOCKER"
 }
 
-source "google_artifact_registry_repository_iam_member" "app_repo_writer" {
+resource "google_artifact_registry_repository_iam_member" "app_repo_writer" {
     project    = var.project_id
       location   = google_artifact_registry_repository.app_repo.location
         repository = google_artifact_registry_repository.app_repo.name
