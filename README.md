@@ -19,4 +19,4 @@ I was unable to get the full pipeline working due to an error in my image tags. 
 
 Today I will be troubleshooting my GH Actions pipeline. Looks like we were denied permissions on our project? Repushing first to troubleshoot issue and performing follow on actions if needed.
 
-- Looks like I foolishly hardcoded the docker repo, of which my service account did not have access to. Its like Claude just speaks the language of information. Love itTemporarily create app-repo in my region to troubleshoot further.
+- Looks like I foolishly hardcoded the docker repo, of which my service account did not have access to. Its like Claude just speaks the language of information. Love itTemporarily create app-repo in my region to troubleshoot further.Last update - I was unable to get this going likely from a discrepancy in app-repo and my existing repo. Start there.
