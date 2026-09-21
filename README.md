@@ -14,3 +14,7 @@ So far today I have set up an artifact registry as IAC, created a tiny app to de
 
 # 09182026
 I was unable to get the full pipeline working due to an error in my image tags. Next session will require debugging in Docker yml associated with my app.
+
+# 09/21/2026
+
+Today I will be troubleshooting my GH Actions pipeline. Looks like we were denied permissions on our project? Repushing first to troubleshoot issue and performing follow on actions if needed.
