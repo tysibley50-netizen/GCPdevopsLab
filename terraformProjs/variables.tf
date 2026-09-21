@@ -16,6 +16,15 @@ variable "container_image" {
   type = string
   default = "us-east1-docker.pkg.dev/project-1f03d34e-6e19-45e0-a6a/app-repo/app:latest"
 }
+variable "region" {
+    type    = string
+      default = "us-east1"
+    }
+
+variable "deploy_sa_email" {
+    type        = string
+          description = "Service account email used by CI/CD to push images and deploy"
+}
 
 
 
