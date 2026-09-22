@@ -8,7 +8,7 @@ def read_root():
 
     api_key = os.getenv("API_KEY", "NOT_SET")
 
-    masked_key = f"{api_key[:4]}..." if len(api_key) > 4 else "NOT_SET"
+    masked_key = f"{api_key[:4]}..." if api_key != "NOT_SET" and len(api_key) > 4 else "NOT_SET"
 
     return {
         "status": "online",
