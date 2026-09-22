@@ -49,6 +49,7 @@ jobs:
                           -var="region=us-east1" \
                           -var="deploy_sa_email=${{ vars.GCP_SA_EMAIL }}" \
                           -var="github_repository=${{ github.repository }}"
+                          -var="container_image=us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:${{ github.sha }}"
 
       # 4. Configure Docker authentication for Artifact Registry
       - name: Docker Auth to Artifact Registry
