@@ -23,3 +23,6 @@ Today I will be troubleshooting my GH Actions pipeline. Looks like we were denie
 
 - Alright I got home and I declared a default region in my variables.tf, added my service account as a artifact writer to my SPECIFIC repo, then I added and redid the deploy.yml.
 - Alright I commented out the old deploy.yml file. Alright I fixed one more typo. Alright I declared a few more variables.
+
+# 09/23/2026
+- my project variable in Github Actions was likely wrong, fixed it and editing this to push to the main repo."
