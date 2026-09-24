@@ -26,3 +26,6 @@ Today I will be troubleshooting my GH Actions pipeline. Looks like we were denie
 
 # 09/23/2026
 - my project variable in Github Actions was likely wrong, fixed it and editing this to push to the main repo."
+
+# 09/24/2026
+- reauthed my CLI and also changed the environment variable back to alphanumeric string of project ID, then declared a combined variable in the YAML of my deployment."
