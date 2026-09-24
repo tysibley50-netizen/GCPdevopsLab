@@ -7,7 +7,7 @@ resource "google_cloud_run_v2_service" "app" {
     service_account = google_service_account.cloud_run_sa.email
 
     containers {
-      image = "image = var.container_image"   # was: "gcr.io/cloudrun/hello"
+      image = var.container_image
 
       env {
         name = "API_KEY"
