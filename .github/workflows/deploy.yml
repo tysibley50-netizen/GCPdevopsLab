@@ -15,6 +15,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 0. Derive the full GCP project ID (GCP_PROJECT_ID var stores the bare
+      #    alphanumeric string only, without the "project-" prefix, because
+      #    that's what our Terraform state bucket is named after)
+      - name: Derive full project ID
+        id: proj
+        run: echo "id=project-${{ vars.GCP_PROJECT_ID }}" >> "$GITHUB_OUTPUT"
+
       # 1. Keyless OIDC Auth
       - name: Authenticate to Google Cloud
         id: auth
@@ -28,38 +35,28 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      # 3. Provision infrastructure FIRST (Artifact Registry repo, IAM, etc.)
-      #    This must run before the Docker push step below, otherwise the
-      #    push fails with "repository ... denied (or it may not exist)"
-      #    on any environment where the repo hasn't been created yet.
+      # 3. Provision the Artifact Registry repo FIRST (targeted apply), before
+      #    the Docker push step below, otherwise the push fails with
+      #    "repository ... denied (or it may not exist)" on a fresh environment
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         working-directory: ./terraformProjs
         run: |
+          # bucket name uses the bare project ID (no "project-" prefix) — this is intentional
           terraform init -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tf-state1" \
                          -backend-config="prefix=terraform/state"
+
       - name: Terraform Apply (registry only)
         working-directory: ./terraformProjs
         run: |
           terraform apply -auto-approve \
-                    -target=google_artifact_registry_repository.app_repo \
-                    -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
-                    -var="region=us-east1" \
-                    -var="deploy_sa_email=${{ vars.GCP_SA_EMAIL }}" \
-                    -var="github_repository=${{ github.repository }}"
-
-      
-      - name: Terraform Apply (infra)
-        working-directory: ./terraformProjs
-        run: |
-          terraform apply -auto-approve \
-                          -var="project_id=${{ vars.GCP_PROJECT_ID }}" \
+                          -target=google_artifact_registry_repository.app_repo \
+                          -var="project_id=${{ steps.proj.outputs.id }}" \
                           -var="region=us-east1" \
                           -var="deploy_sa_email=${{ vars.GCP_SA_EMAIL }}" \
                           -var="github_repository=${{ github.repository }}"
-                          -var="container_image=us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:${{ github.sha }}"
 
       # 4. Configure Docker authentication for Artifact Registry
       - name: Docker Auth to Artifact Registry
@@ -69,9 +66,21 @@ jobs:
       # 5. Container Build & Push (app-repo now guaranteed to exist)
       - name: Build and Push Docker Image
         run: |
-          IMAGE_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:${{ github.sha }}"
-          LATEST_TAG="us-east1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/app-repo/app:latest"
+          IMAGE_TAG="us-east1-docker.pkg.dev/${{ steps.proj.outputs.id }}/app-repo/app:${{ github.sha }}"
+          LATEST_TAG="us-east1-docker.pkg.dev/${{ steps.proj.outputs.id }}/app-repo/app:latest"
 
           docker build -t $IMAGE_TAG -t $LATEST_TAG ./tinyApp
           docker push $IMAGE_TAG
           docker push $LATEST_TAG
+
+      # 6. Full apply — now that the image has been pushed, deploy the
+      #    Cloud Run revision (and anything else) referencing it
+      - name: Terraform Apply (full)
+        working-directory: ./terraformProjs
+        run: |
+          terraform apply -auto-approve \
+                          -var="project_id=${{ steps.proj.outputs.id }}" \
+                          -var="region=us-east1" \
+                          -var="deploy_sa_email=${{ vars.GCP_SA_EMAIL }}" \
+                          -var="github_repository=${{ github.repository }}" \
+                          -var="container_image=us-east1-docker.pkg.dev/${{ steps.proj.outputs.id }}/app-repo/app:${{ github.sha }}"
